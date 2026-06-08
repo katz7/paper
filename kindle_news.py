@@ -6,18 +6,23 @@ from email.mime.multipart import MIMEMultipart
 from email import encoders
 
 # 1. Configuración de fuentes y credenciales
+
 DIARIOS_MEXICO = {
     "La Jornada": "https://jornada.com.mx",
     "Excélsior": "https://excelsior.com.mx",
     "Milenio": "https://milenio.com.mx"
 }
 
-# Configura estas variables en tu entorno o usa un archivo .env
-EMAIL_EMISOR = os.getenv("EMAIL_EMISOR", "tu_correo@gmail.com")
-PASSWORD_EMISOR = os.getenv("PASSWORD_EMISOR", "tu_contraseña_o_token")
-EMAIL_KINDLE = os.getenv("EMAIL_KINDLE", "tu_usuario@kindle.com")
 
-SMTP_SERVER = "://gmail.com"  # Cambiar según tu proveedor
+
+# Configura estas variables en tu entorno o usa un archivo .env
+
+EMAIL_EMISOR = os.getenv("EMAIL_EMISOR")
+PASSWORD_EMISOR = os.getenv("PASSWORD_EMISOR")
+EMAIL_KINDLE = os.getenv("EMAIL_KINDLE")
+``
+
+SMTP_SERVER = "smtp.gmail.com" # Cambiar según tu proveedor
 SMTP_PORT = 587
 
 def generar_periodico_html():
