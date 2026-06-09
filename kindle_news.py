@@ -1,4 +1,3 @@
-
 import os
 import smtplib
 import feedparser
@@ -100,4 +99,3 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"[ERROR] {e}")
         raise
- 
