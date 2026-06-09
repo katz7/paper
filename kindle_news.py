@@ -5,13 +5,13 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email import encoders
 
+
 DIARIOS_MEXICO = {
-    "La Jornada": "https://www.jornada.com.mx/ultimas/rss.xml",
-    "Excelsior": "https://www.excelsior.com.mx/rss.xml",
-    "Milenio": "https://www.milenio.com/rss",
     "El Universal": "https://www.eluniversal.com.mx/rss.xml",
-    "Reforma": "https://www.reforma.com/rss/portada.xml",
+    "Milenio": "https://www.milenio.com/rss",
+    "Animal Político": "https://www.animalpolitico.com/feed/"
 }
+
 
 EMAIL_EMISOR = os.getenv("EMAIL_EMISOR")
 PASSWORD_EMISOR = os.getenv("PASSWORD_EMISOR")
