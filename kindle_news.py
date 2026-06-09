@@ -5,7 +5,6 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email import encoders
 
-# 1. Fuentes RSS estables
 DIARIOS_MEXICO = {
     "La Jornada": "https://jornada.com.mx",
     "Excélsior": "https://excelsior.com.mx",
@@ -31,7 +30,6 @@ def generar_periodico_html():
         id_diario = nombre.replace(" ", "")
         html += f"<h2 id='{id_diario}'>{nombre}</h2>"
 
-        # Agent para que los diarios no bloqueen a GitHub Actions
         feed = feedparser.parse(
             url, 
             agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
@@ -80,16 +78,12 @@ def enviar_a_kindle(contenido_html):
 
     print("Conectando de forma segura con el servidor de Gmail...")
     
-    # Aquí estaba el detalle. Queda fijado estrictamente como texto limpio sin diagonales.
+    # Dirección limpia corregida
     server = smtplib.SMTP_SSL("://gmail.com", 465)
 
     try:
         server.login(EMAIL_EMISOR.strip(), PASSWORD_EMISOR.strip())
-        server.sendmail(
-            EMAIL_EMISOR.strip(),
-            EMAIL_KINDLE.strip(),
-            msg.as_string()
-        )
+        server.sendmail(EMAIL_EMISOR.strip(), EMAIL_KINDLE.strip(), msg.as_string())
         print("[OK] ¡Periódico enviado con éxito!")
     except Exception as e:
         print(f"[ERROR SMTP]: {e}")
