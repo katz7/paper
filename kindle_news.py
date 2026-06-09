@@ -15,7 +15,7 @@ DIARIOS_MEXICO = {
 print("EMAIL:", EMAIL_EMISOR)
 print("PASS LENGTH:", len(PASSWORD_EMISOR))
 
-EMAIL_EMISOR = os.getenv("EMAIL_EMISOR")
+EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")
 PASSWORD_EMISOR = os.environ.get("PASSWORD_EMISOR").strip()
 EMAIL_KINDLE = os.getenv("EMAIL_KINDLE")
 
@@ -77,10 +77,10 @@ def enviar_a_kindle(contenido_html):
         part.add_header('Content-Disposition', f'attachment; filename="{nombre_archivo}"')
         msg.attach(part)
 
-    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
     try:
         server.starttls()
-        server.login(EMAIL_EMISOR, PASSWORD_EMISOR)
+        server.login(EMAIL_EMISOR.strip(), PASSWORD_EMISOR.strip())
         server.sendmail(EMAIL_EMISOR, EMAIL_KINDLE, msg.as_string())
         print("[OK] Correo enviado correctamente a Kindle")
     finally:
