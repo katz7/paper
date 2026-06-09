@@ -79,7 +79,7 @@ def enviar_a_kindle(contenido_html):
     print("Conectando de forma segura con el servidor de Gmail...")
     
     # Dirección limpia corregida
-    server = smtplib.SMTP_SSL("://gmail.com", 465)
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
 
     try:
         server.login(EMAIL_EMISOR.strip(), PASSWORD_EMISOR.strip())
