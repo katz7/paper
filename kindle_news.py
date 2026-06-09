@@ -12,9 +12,11 @@ DIARIOS_MEXICO = {
     "Animal Político": "https://www.animalpolitico.com/feed/"
 }
 
+print("EMAIL:", EMAIL_EMISOR)
+print("PASS LENGTH:", len(PASSWORD_EMISOR))
 
 EMAIL_EMISOR = os.getenv("EMAIL_EMISOR")
-PASSWORD_EMISOR = os.getenv("PASSWORD_EMISOR")
+PASSWORD_EMISOR = os.environ.get("PASSWORD_EMISOR").strip()
 EMAIL_KINDLE = os.getenv("EMAIL_KINDLE")
 
 SMTP_SERVER = "smtp.gmail.com"
