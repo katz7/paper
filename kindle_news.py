@@ -31,10 +31,10 @@ def generar_periodico_html():
         id_diario = nombre.replace(" ", "")
         html += f"<h2 id='{id_diario}'>{nombre}</h2>"
 
-        # El agent es OBLIGATORIO para que no te dé el error de "Sin noticias disponibles"
+        # Agent para que los diarios no bloqueen a GitHub Actions
         feed = feedparser.parse(
             url, 
-            agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         )
 
         if not feed.entries:
@@ -80,7 +80,7 @@ def enviar_a_kindle(contenido_html):
 
     print("Conectando de forma segura con el servidor de Gmail...")
     
-    # ¡AQUÍ ESTABA EL ERROR! La dirección debe ser exactamente "://gmail.com" sin http ni diagonales
+    # Aquí estaba el detalle. Queda fijado estrictamente como texto limpio sin diagonales.
     server = smtplib.SMTP_SSL("://gmail.com", 465)
 
     try:
