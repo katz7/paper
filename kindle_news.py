@@ -19,10 +19,6 @@ EMAIL_EMISOR = os.getenv("EMAIL_EMISOR")
 PASSWORD_EMISOR = os.environ.get("PASSWORD_EMISOR").strip()
 EMAIL_KINDLE = os.getenv("EMAIL_KINDLE")
 
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-
-
 def generar_periodico_html():
     html = "<html><head><meta charset='utf-8'></head><body>"
     html += "<h1>Periodico Diario Mexico</h1><hr>"
