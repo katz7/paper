@@ -6,23 +6,27 @@ from email.mime.multipart import MIMEMultipart
 from email import encoders
 
 
+#  Fuentes RSS válidas
 DIARIOS_MEXICO = {
     "El Universal": "https://www.eluniversal.com.mx/rss.xml",
     "Milenio": "https://www.milenio.com/rss",
     "Animal Político": "https://www.animalpolitico.com/feed/"
 }
 
-print("EMAIL:", EMAIL_EMISOR)
-print("PASS LENGTH:", len(PASSWORD_EMISOR))
-
+# Variables de entorno (SIEMPRE arriba)
 EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")
-PASSWORD_EMISOR = os.environ.get("PASSWORD_EMISOR").strip()
-EMAIL_KINDLE = os.getenv("EMAIL_KINDLE")
+PASSWORD_EMISOR = os.environ.get("PASSWORD_EMISOR")
+EMAIL_KINDLE = os.environ.get("EMAIL_KINDLE")
+
+#  Debug (puedes quitar luego)
+print("EMAIL:", EMAIL_EMISOR)
+print("PASS LENGTH:", len(PASSWORD_EMISOR) if PASSWORD_EMISOR else 0)
+
 
 def generar_periodico_html():
     html = "<html><head><meta charset='utf-8'></head><body>"
-    html += "<h1>Periodico Diario Mexico</h1><hr>"
-    html += "<h2>Indice</h2><ul>"
+    html += "<h1>Periódico Diario México</h1><hr>"
+    html += "<h2>Índice</h2><ul>"
 
     for nombre in DIARIOS_MEXICO.keys():
         id_diario = nombre.replace(" ", "")
@@ -46,10 +50,11 @@ def generar_periodico_html():
             continue
 
         for entry in feed.entries[:7]:
-            titulo = entry.get("title", "Sin titulo")
+            titulo = entry.get("title", "Sin título")
             resumen = entry.get("summary", "Sin contenido")
             html += f"<h3>{titulo}</h3>"
             html += f"<p>{resumen}</p><br>"
+
         html += "<hr>"
 
     html += "</body></html>"
@@ -58,7 +63,7 @@ def generar_periodico_html():
 
 def enviar_a_kindle(contenido_html):
     if not EMAIL_EMISOR or not PASSWORD_EMISOR or not EMAIL_KINDLE:
-        raise ValueError("Faltan variables de entorno: EMAIL_EMISOR, PASSWORD_EMISOR o EMAIL_KINDLE")
+        raise ValueError("Faltan variables de entorno")
 
     nombre_archivo = "Prensa_Mexico.html"
 
@@ -74,15 +79,26 @@ def enviar_a_kindle(contenido_html):
         part = MIMEBase('application', 'octet-stream')
         part.set_payload(f.read())
         encoders.encode_base64(part)
-        part.add_header('Content-Disposition', f'attachment; filename="{nombre_archivo}"')
+        part.add_header(
+            'Content-Disposition',
+            f'attachment; filename="{nombre_archivo}"'
+        )
         msg.attach(part)
 
+    #  SMTP corregido (esto era CLAVE)
     server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+
     try:
-        server.starttls()
         server.login(EMAIL_EMISOR.strip(), PASSWORD_EMISOR.strip())
-        server.sendmail(EMAIL_EMISOR, EMAIL_KINDLE, msg.as_string())
-        print("[OK] Correo enviado correctamente a Kindle")
+        server.sendmail(
+            EMAIL_EMISOR,
+            EMAIL_KINDLE,
+            msg.as_string()
+        )
+        print("[OK] Correo enviado a Kindle")
+    except Exception as e:
+        print("[ERROR SMTP]", e)
+        raise
     finally:
         server.quit()
 
@@ -91,9 +107,13 @@ def enviar_a_kindle(contenido_html):
 
 if __name__ == "__main__":
     try:
+        print("Generando periódico...")
         html_data = generar_periodico_html()
+
+        print("Enviando a Kindle...")
         enviar_a_kindle(html_data)
-        print("[OK] Periodico enviado correctamente")
+
+        print("[OK] Proceso completado")
     except Exception as e:
-        print(f"[ERROR] {e}")
+        print(f"[ERROR GENERAL]: {e}")
         raise
