@@ -18,7 +18,7 @@ EMAIL_KINDLE = os.environ.get("EMAIL_KINDLE")
 
 def generar_periodico_html():
     html = "<html><head><meta charset='utf-8'></head><body>"
-    html += "<h1>📰 Periódico Diario México</h1><hr>"
+    html += "<h1> Periódico Diario México</h1><hr>"
     html += "<h2>Índice de Secciones</h2><ul>"
 
     for nombre in DIARIOS_MEXICO.keys():
