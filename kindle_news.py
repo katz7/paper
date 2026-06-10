@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email import encoders
 
 DIARIOS_MEXICO = {
-    "La Jornada": "https://www.jornada.com.mx/rss",
+    "La Jornada": "https://www.jornada.com.mx/rss/edicion.xml?v=1",
     "Excélsior": "https://www.excelsior.com.mx/rss",
     "El universal": "https://archivo.eluniversal.com.mx/disenio/servicios/EU_rss.htm",
     "milenio": "https://www.milenio.com/api/v1/rss"
