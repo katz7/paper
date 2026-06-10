@@ -11,50 +11,17 @@ DIARIOS_MEXICO = {
     "Milenio": "https://milenio.com"
 }
 
-EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")
-PASSWORD_EMISOR = os.environ.get("PASSWORD_EMISOR")
+# Variables de entorno
+EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")     
+PASSWORD_EMISOR = os.environ.get("PASSWORD_EMISOR") 
 EMAIL_KINDLE = os.environ.get("EMAIL_KINDLE")
 
-
 def generar_periodico_html():
-    html = "<html><head><meta charset='utf-8'></head><body>"
-    html += "<h1> Periódico Diario México</h1><hr>"
-    html += "<h2>Índice de Secciones</h2><ul>"
-
-    for nombre in DIARIOS_MEXICO.keys():
-        id_diario = nombre.replace(" ", "")
-        html += f"<li><a href='#{id_diario}'>{nombre}</a></li>"
-    html += "</ul><hr>"
-
-    for nombre, url in DIARIOS_MEXICO.items():
-        id_diario = nombre.replace(" ", "")
-        html += f"<h2 id='{id_diario}'>{nombre}</h2>"
-
-        feed = feedparser.parse(
-            url, 
-            agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        )
-
-        if not feed.entries:
-            print(f"[ERROR] Sin noticias disponibles para {nombre}")
-            html += "<p><i>No se pudo cargar este diario hoy.</i></p><hr>"
-            continue
-
-        for entry in feed.entries[:7]:
-            titulo = entry.get("title", "Sin título")
-            resumen = entry.get("summary", "Sin contenido disponible.")
-            html += f"<h3>{titulo}</h3>"
-            html += f"<p>{resumen}</p><br>"
-
-        html += "<hr>"
-
-    html += "</body></html>"
-    return html
-
+  
 
 def enviar_a_kindle(contenido_html):
     if not EMAIL_EMISOR or not PASSWORD_EMISOR or not EMAIL_KINDLE:
-        raise ValueError("Faltan configurar variables de entorno en GitHub Secrets.")
+        raise ValueError("Faltan configurar variables de entorno.")
 
     nombre_archivo = "Prensa_Mexico.html"
 
@@ -76,15 +43,17 @@ def enviar_a_kindle(contenido_html):
         )
         msg.attach(part)
 
-    print("Conectando de forma segura con el servidor de Gmail...")
     
-    # Dirección limpia corregida
-    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    print("Conectando con el servidor SMTP de Brevo...")
+
+    # Brevo usa smtp-relay.brevo.com con puerto 587 (TLS)
+    server = smtplib.SMTP("smtp-relay.brevo.com", 587)
+    server.starttls()  # Iniciar conexión segura
 
     try:
         server.login(EMAIL_EMISOR.strip(), PASSWORD_EMISOR.strip())
         server.sendmail(EMAIL_EMISOR.strip(), EMAIL_KINDLE.strip(), msg.as_string())
-        print("[OK] ¡Periódico enviado con éxito!")
+        print("[OK] ¡Periódico enviado con éxito a través de Brevo!")
     except Exception as e:
         print(f"[ERROR SMTP]: {e}")
         raise
