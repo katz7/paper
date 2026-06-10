@@ -6,9 +6,10 @@ from email.mime.multipart import MIMEMultipart
 from email import encoders
 
 DIARIOS_MEXICO = {
-    "La Jornada": "https://jornada.com.mx",
-    "Excélsior": "https://excelsior.com.mx",
-    "Milenio": "https://milenio.com"
+    "La Jornada": "https://www.jornada.com.mx/rss",
+    "Excélsior": "https://www.excelsior.com.mx/rss",
+    "El universal": "https://archivo.eluniversal.com.mx/disenio/servicios/EU_rss.htm",
+    "milenio": "https://www.milenio.com/api/v1/rss"
 }
 
 EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")
