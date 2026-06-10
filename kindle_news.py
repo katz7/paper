@@ -8,9 +8,14 @@ from email import encoders
 DIARIOS_MEXICO = {
     "La Jornada": "https://www.jornada.com.mx/rss/edicion.xml?v=1",
     "Reforma": "https://www.reforma.com/rss/portada.xml",
-    "Excélsior": "https://www.excelsior.com.mx/rss/",
-    "El universal": "https://archivo.eluniversal.com.mx/disenio/servicios/EU_rss.htm",
-    "milenio": "https://www.milenio.com/api/v1/rss"
+    "Reforma ciudad": "https://www.reforma.com/rss/ciudad.xml",
+    "Reforma justicia": "https://www.reforma.com/rss/justicia.xml",
+    "Reforma internacional": "https://www.reforma.com/rss/internacional.xml", 
+    "Reforma cultura": "https://www.reforma.com/rss/cultura.xml",
+    "Reforma gadgets": "https://www.reforma.com/rss/gadgets.xml"
+    #  "Excélsior": "https://www.excelsior.com.mx/rss/",
+   # "El universal": "https://archivo.eluniversal.com.mx/disenio/servicios/EU_rss.htm",
+    #"milenio": "https://www.milenio.com/api/v1/rss"
 }
 
 EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")
