@@ -5,10 +5,11 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email import encoders
 
+#  feeds RSS
 DIARIOS_MEXICO = {
-    "La Jornada": "https://jornada.com.mx",
-    "Excélsior": "https://excelsior.com.mx",
-    "Milenio": "https://milenio.com"
+    "La Jornada": "https://www.jornada.com.mx/rss",
+    "Excélsior": "https://www.excelsior.com.mx/rss",
+    "Milenio": "https://www.milenio.com/rss"
 }
 
 EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")
@@ -18,7 +19,7 @@ EMAIL_KINDLE = os.environ.get("EMAIL_KINDLE")
 
 def generar_periodico_html():
     html = "<html><head><meta charset='utf-8'></head><body>"
-    html += "<h1> Periódico Diario México</h1><hr>"
+    html += "<h1>📰 Periódico Diario México</h1><hr>"
     html += "<h2>Índice de Secciones</h2><ul>"
 
     for nombre in DIARIOS_MEXICO.keys():
@@ -30,29 +31,40 @@ def generar_periodico_html():
         id_diario = nombre.replace(" ", "")
         html += f"<h2 id='{id_diario}'>{nombre}</h2>"
 
-        feed = feedparser.parse(
-            url, 
-            agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        )
+        try:
+            print(f"Obteniendo noticias de {nombre}...")
+            feed = feedparser.parse(
+                url, 
+                agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            )
 
-        if not feed.entries:
-            print(f"[ERROR] Sin noticias disponibles para {nombre}")
-            html += "<p><i>No se pudo cargar este diario hoy.</i></p><hr>"
-            continue
+            if not feed.entries:
+                print(f"[ERROR] Sin noticias disponibles para {nombre}")
+                html += "<p><i>⚠️ No se pudo cargar este diario hoy.</i></p><hr>"
+                continue
 
-        for entry in feed.entries[:7]:
-            titulo = entry.get("title", "Sin título")
-            resumen = entry.get("summary", "Sin contenido disponible.")
-            html += f"<h3>{titulo}</h3>"
-            html += f"<p>{resumen}</p><br>"
+            print(f" {len(feed.entries)} noticias encontradas en {nombre}")
 
-        html += "<hr>"
+            for i, entry in enumerate(feed.entries[:7]):
+                titulo = entry.get("title", "Sin título")
+                resumen = entry.get("summary", "Sin contenido disponible.")
+                # Limpiar un poco el HTML del resumen
+                import re
+                resumen_limpio = re.sub('<[^<]+?>', '', resumen)[:300]
+                html += f"<h3>{i+1}. {titulo}</h3>"
+                html += f"<p>{resumen_limpio}...</p><br>"
+
+            html += "<hr>"
+            
+        except Exception as e:
+            print(f"[ERROR] Problema con {nombre}: {e}")
+            html += f"<p><i>❌ Error al cargar {nombre}</i></p><hr>"
 
     html += "</body></html>"
     return html
 
 
-def enviar_a_kindle(contenido_html):
+def enviar_a_kindle(contenido_html):  #  Nombre corregido (con 'i')
     if not EMAIL_EMISOR or not PASSWORD_EMISOR or not EMAIL_KINDLE:
         raise ValueError("Faltan configurar variables de entorno.")
 
@@ -76,7 +88,8 @@ def enviar_a_kindle(contenido_html):
         )
         msg.attach(part)
 
-   
+    # Usando Brevo
+    print("Conectando con servidor SMTP de Brevo...")
     server = smtplib.SMTP("smtp-relay.brevo.com", 587)
     server.starttls()
 
@@ -94,12 +107,13 @@ def enviar_a_kindle(contenido_html):
         os.remove(nombre_archivo)
 
 
+# Bloque principal corregido
 if __name__ == "__main__":
     try:
         print("Iniciando compilación del periódico...")
         html_data = generar_periodico_html()
         print("Preparando el envío por correo...")
-        enviar_a_kindle(html_data)
+        enviar_a_kindle(html_data)  # ✅ Nombre corregido
         print("[OK] Todo el proceso ha finalizado correctamente.")
     except Exception as e:
         print(f"[ERROR GENERAL DEL SCRIPT]: {e}")
