@@ -12,7 +12,14 @@ DIARIOS_MEXICO = {
     "Reforma justicia": "https://www.reforma.com/rss/justicia.xml",
     "Reforma internacional": "https://www.reforma.com/rss/internacional.xml", 
     "Reforma cultura": "https://www.reforma.com/rss/cultura.xml",
-    "Reforma gadgets": "https://www.reforma.com/rss/gadgets.xml"
+    "Reforma gadgets": "https://www.reforma.com/rss/gadgets.xml",
+    "Proceso nacional": "https://www.proceso.com.mx/rss/feed.html?r=1",
+    "Proceso economina": "https://www.proceso.com.mx/rss/feed.html?r=2",
+    "Proceso Internacional": "https://www.proceso.com.mx/rss/feed.html?r=3",
+    "Proceso Ciencia y Tecnología": "https://www.proceso.com.mx/rss/feed.html?r=6",
+    "Proceso Cultura": "https://www.proceso.com.mx/rss/feed.html?r=7",
+    "Proceso Fotografia": "https://www.proceso.com.mx/rss/feed.html?r=30",
+    "preceso Revista": "https://www.proceso.com.mx/rss/feed.html?r=9"
     #  "Excélsior": "https://www.excelsior.com.mx/rss/",
    # "El universal": "https://archivo.eluniversal.com.mx/disenio/servicios/EU_rss.htm",
     #"milenio": "https://www.milenio.com/api/v1/rss"
