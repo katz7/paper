@@ -1,17 +1,19 @@
 import os
 import smtplib
 import feedparser
+import re
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email import encoders
 
-#  feeds RSS
+# URLs corregidas de los feeds RSS
 DIARIOS_MEXICO = {
-    "La Jornada": "https://www.jornada.com.mx/rss",
+    "La Jornada": "https://www.jornada.com.mx/rss/ultimas.xml",
     "Excélsior": "https://www.excelsior.com.mx/rss",
-    "Milenio": "https://www.milenio.com/rss"
+    "Milenio": "https://www.milenio.com/feed",
 }
 
+# Variables de entorno (configuradas en GitHub Secrets)
 EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")
 PASSWORD_EMISOR = os.environ.get("PASSWORD_EMISOR")
 EMAIL_KINDLE = os.environ.get("EMAIL_KINDLE")
@@ -19,7 +21,7 @@ EMAIL_KINDLE = os.environ.get("EMAIL_KINDLE")
 
 def generar_periodico_html():
     html = "<html><head><meta charset='utf-8'></head><body>"
-    html += "<h1>📰 Periódico Diario México</h1><hr>"
+    html += "<h1> Periódico Diario México</h1><hr>"
     html += "<h2>Índice de Secciones</h2><ul>"
 
     for nombre in DIARIOS_MEXICO.keys():
@@ -32,15 +34,15 @@ def generar_periodico_html():
         html += f"<h2 id='{id_diario}'>{nombre}</h2>"
 
         try:
-            print(f"Obteniendo noticias de {nombre}...")
+            print(f"📡 Obteniendo noticias de {nombre}...")
             feed = feedparser.parse(
                 url, 
                 agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
             )
 
             if not feed.entries:
-                print(f"[ERROR] Sin noticias disponibles para {nombre}")
-                html += "<p><i>⚠️ No se pudo cargar este diario hoy.</i></p><hr>"
+                print(f" Sin noticias disponibles para {nombre}")
+                html += "<p><i>No se pudo cargar este diario hoy.</i></p><hr>"
                 continue
 
             print(f" {len(feed.entries)} noticias encontradas en {nombre}")
@@ -48,8 +50,7 @@ def generar_periodico_html():
             for i, entry in enumerate(feed.entries[:7]):
                 titulo = entry.get("title", "Sin título")
                 resumen = entry.get("summary", "Sin contenido disponible.")
-                # Limpiar un poco el HTML del resumen
-                import re
+                # Limpiar HTML del resumen
                 resumen_limpio = re.sub('<[^<]+?>', '', resumen)[:300]
                 html += f"<h3>{i+1}. {titulo}</h3>"
                 html += f"<p>{resumen_limpio}...</p><br>"
@@ -57,16 +58,16 @@ def generar_periodico_html():
             html += "<hr>"
             
         except Exception as e:
-            print(f"[ERROR] Problema con {nombre}: {e}")
-            html += f"<p><i>❌ Error al cargar {nombre}</i></p><hr>"
+            print(f" Error con {nombre}: {e}")
+            html += f"<p><i>Error al cargar {nombre}</i></p><hr>"
 
     html += "</body></html>"
     return html
 
 
-def enviar_a_kindle(contenido_html):  #  Nombre corregido (con 'i')
+def enviar_a_kindle(contenido_html):
     if not EMAIL_EMISOR or not PASSWORD_EMISOR or not EMAIL_KINDLE:
-        raise ValueError("Faltan configurar variables de entorno.")
+        raise ValueError("Faltan configurar variables de entorno en GitHub Secrets.")
 
     nombre_archivo = "Prensa_Mexico.html"
 
@@ -88,17 +89,18 @@ def enviar_a_kindle(contenido_html):  #  Nombre corregido (con 'i')
         )
         msg.attach(part)
 
-    # Usando Brevo
-    print("Conectando con servidor SMTP de Brevo...")
+    # Conexión con Brevo
+    print("🔌 Conectando con servidor SMTP de Brevo...")
     server = smtplib.SMTP("smtp-relay.brevo.com", 587)
     server.starttls()
 
     try:
+        # LÍNEA CORRECTA - verifica que estos nombres estén bien escritos
         server.login(EMAIL_EMISOR.strip(), PASSWORD_EMISOR.strip())
         server.sendmail(EMAIL_EMISOR.strip(), EMAIL_KINDLE.strip(), msg.as_string())
-        print("[OK] ¡Periódico enviado con éxito!")
+        print(" ¡Periódico enviado con éxito a tu Kindle!")
     except Exception as e:
-        print(f"[ERROR SMTP]: {e}")
+        print(f" ERROR SMTP: {e}")
         raise
     finally:
         server.quit()
@@ -107,14 +109,13 @@ def enviar_a_kindle(contenido_html):  #  Nombre corregido (con 'i')
         os.remove(nombre_archivo)
 
 
-# Bloque principal corregido
 if __name__ == "__main__":
     try:
-        print("Iniciando compilación del periódico...")
+        print(" Iniciando compilación del periódico...")
         html_data = generar_periodico_html()
-        print("Preparando el envío por correo...")
-        enviar_a_kindle(html_data)  # ✅ Nombre corregido
-        print("[OK] Todo el proceso ha finalizado correctamente.")
+        print("📧 Preparando el envío por correo...")
+        enviar_a_kindle(html_data)
+        print(" Todo el proceso ha finalizado correctamente.")
     except Exception as e:
-        print(f"[ERROR GENERAL DEL SCRIPT]: {e}")
+        print(f" ERROR GENERAL DEL SCRIPT: {e}")
         raise
