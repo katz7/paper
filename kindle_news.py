@@ -150,7 +150,7 @@ def enviar_a_kindle(contenido_html):
     if not EMAIL_EMISOR or not PASSWORD_EMISOR or not EMAIL_KINDLE:
         raise ValueError("Faltan configurar variables de entorno en GitHub Secrets.")
 
-    nombre_archivo = "Periódicos_Mexico.html"
+    nombre_archivo = "Prensa_Mexico.html"
 
     with open(nombre_archivo, "w", encoding="utf-8") as f:
         f.write(contenido_html)
