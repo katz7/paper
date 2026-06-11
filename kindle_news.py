@@ -37,7 +37,7 @@ def generar_periodico_html():
         body {
             font-family: Georgia, serif;
             color: #000000;
-            background-color: #ffffff;
+            background-img:"papel.jpeg";
             line-height: 1.5;
             margin: 5%;
             padding: 0;
