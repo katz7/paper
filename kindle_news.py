@@ -9,19 +9,40 @@ from email import encoders
  
 DIARIOS_MEXICO = {
     "La Jornada": "https://www.jornada.com.mx/rss/edicion.xml?v=1",
+    "La Jornada Politica": "https://www.jornada.com.mx/rss/politica.xml?v=1",
+    "La Jornada Economia": "https://www.jornada.com.mx/rss/economia.xml?v=1",
+    "La Jornada Estados": "https://www.jornada.com.mx/rss/estados.xml?v=1",
+    "La Jornada Capital": "https://www.jornada.com.mx/rss/capital.xml?v=1",
+    "La Jornada Sociedad y justicia": "https://www.jornada.com.mx/rss/sociedad.xml?v=1",
+    "La Jornada Cultura": "https://www.jornada.com.mx/rss/cultura.xml?v=1",
+    "La Jornada Ciencias": "https://www.jornada.com.mx/rss/ciencias.xml?v=1",
+  
     "Reforma": "https://www.reforma.com/rss/portada.xml",
     "Reforma ciudad": "https://www.reforma.com/rss/ciudad.xml",
     "Reforma justicia": "https://www.reforma.com/rss/justicia.xml",
     "Reforma internacional": "https://www.reforma.com/rss/internacional.xml",
     "Reforma cultura": "https://www.reforma.com/rss/cultura.xml",
     "Reforma gadgets": "https://www.reforma.com/rss/gadgets.xml",
-    "Proceso nacional": "https://www.proceso.com.mx/rss/feed.html?r=1",
-    "Proceso economia": "https://www.proceso.com.mx/rss/feed.html?r=2",
-    "Proceso Internacional": "https://www.proceso.com.mx/rss/feed.html?r=3",
-    "Proceso Ciencia y Tecnología": "https://www.proceso.com.mx/rss/feed.html?r=6",
-    "Proceso Cultura": "https://www.proceso.com.mx/rss/feed.html?r=7",
-    "Proceso Fotografia": "https://www.proceso.com.mx/rss/feed.html?r=30",
-    "Proceso Revista": "https://www.proceso.com.mx/rss/feed.html?r=9"
+    #"Proceso nacional": "https://www.proceso.com.mx/rss/feed.html?r=1",
+    #"Proceso economia": "https://www.proceso.com.mx/rss/feed.html?r=2",
+    #"Proceso Internacional": "https://www.proceso.com.mx/rss/feed.html?r=3",
+    #"Proceso Ciencia y Tecnología": "https://www.proceso.com.mx/rss/feed.html?r=6",
+    #"Proceso Cultura": "https://www.proceso.com.mx/rss/feed.html?r=7",
+    # Google News México
+    "Google News México": "https://news.google.com/rss?hl=es-419&gl=MX&ceid=MX:es-419",
+    "Google News Política": "https://news.google.com/rss/search?q=mexico+politica&hl=es-419&gl=MX&ceid=MX:es-419",
+    "Google News Economía": "https://news.google.com/rss/search?q=mexico+economia&hl=es-419&gl=MX&ceid=MX:es-419",
+    # Internacional en español
+    "BBC Mundo": "https://feeds.bbci.co.uk/mundo/rss.xml",
+    "BBC Mundo Ciencia": "https://feeds.bbci.co.uk/mundo/noticias/ciencia_y_tecnologia/rss.xml",
+    "BBC Mundo Economía": "https://feeds.bbci.co.uk/mundo/noticias/economia/rss.xml",
+    "France24 Español": "https://www.france24.com/es/rss",
+    "France24 Economía": "https://www.france24.com/es/economia/rss",
+    "Euronews Español": "https://es.euronews.com/rss",
+    "RT Español": "https://actualidad.rt.com/rss",
+
+    
+    
 }
  
 EMAIL_EMISOR = os.environ.get("EMAIL_EMISOR")
@@ -361,6 +382,19 @@ def enviar_a_kindle(contenido_html):
  
 
 
+ ##################### html #######################       
+
+#if __name__ == "__main__":
+#    print("Iniciando compilación del periódico...")
+#    html_data = generar_periodico_html()
+#    with open("periodico.html", "w", encoding="utf-8") as f:
+#        f.write(html_data)
+#    print("Archivo guardado como periodico.html")
+
+
+
+####################################################
+
 if __name__ == "__main__":
     try:
         print("Iniciando compilación del periódico...")
@@ -371,3 +405,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"[ERROR GENERAL DEL SCRIPT]: {e}")
         raise
+
